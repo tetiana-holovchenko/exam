@@ -1,6 +1,6 @@
 {
     "email": "tettest@gmail.com",
     "password": "testpass",
-    "securityQuestion": "Mother's maiden name?",
+    "securityQuestion": " Mother's maiden name? ",
     "securityAnswer": "Surname"
 }
