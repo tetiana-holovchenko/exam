@@ -1,6 +1,16 @@
 {
-    "email": "tettest@gmail.com",
+    "email": "tettest1@gmail.com",
     "password": "testpass",
     "securityQuestion": " Mother's maiden name? ",
-    "securityAnswer": "Surname"
+    "securityAnswer": "Surname",
+    "productName": " OWASP Juice Shop Hoodie ",
+    "country": "Ukraine",
+    "name": "Tetiana",
+    "mobile": "0950000000",
+    "zip": "00000",
+    "adddress": "You need to deliver it",
+    "city": "Zaporizhzhya",
+    "state": "Zp",
+    "card": "1111111111111111",
+    "comment": "it's a comment"
 }
