@@ -1,8 +1,8 @@
-import BasePage from "./BasePage";
 
-class LoginPage extends BasePage {
+class LoginPage {
 
-    visit{
+    visit() {
+        cy.log('Open autorization form');
         cy.visit('/#/login');
     }
 
@@ -10,25 +10,43 @@ class LoginPage extends BasePage {
         return cy.get('#email')
     }
 
-{
     getPasswordField() {
         return cy.get('#password')
     }
-    {
-        getSubmitButton() {
-            return cy.get('#loginButton' )
-        }
 
-        fillLoginFields(useremail, password){
-            cy.log('Fill in authorization fields')
-            useremail ? this.getLoginNameField.type(useremail) : cy.log('useremail field is empty');
-            password ? this.getPasswordField.type(password) : cy.log('password field is empty');
+    getSubmitButton() {
+        return cy.get('#loginButton')
+    }
 
-            this.getSubmitButton.click({ force: true });
+    getSubmitButtonDisabled() {
+        cy.log('LogIn button is disabled')
+        return cy.get('button#loginButton[disabled="true"]')
+    }
 
-        }
+    getCookiesButton() {
+        cy.log('Accept cookies')
+        return cy.get('a[aria-label="dismiss cookie message"]')
+    }
+
+    getWelcomeBanner() {
+        cy.log('Closing Popup')
+        return cy.get('button[aria-label="Close Welcome Banner"]');
+    }
+    
+    getErrorMessageText() {
+        cy.log('error: Invalid email or password')
+        return cy.get('div.error.ng-star-inserted')
+    }
+
+    fillLoginFields(useremail, password) {
+        cy.log('Fill in authorization fields')
+        useremail ? this.getLoginNameField.type(useremail) : cy.log('useremail field is empty');
+        password ? this.getPasswordField.type(password) : cy.log('password field is empty');
+        this.getSubmitButton.click({ force: true });
+
     }
 }
+
 
 
 export default new LoginPage()

@@ -1,77 +1,85 @@
 import user from '../fixtures/user.json'
-import {fillAuthorizationFields} from '../support/helper';
+import { fillAuthorizationFields } from '../support/helper';
 import { itemSearchMainPage } from '../support/helper';
-
+import LoginPage from '../support/pages/LoginPage';
+import AddtoBasket from '../support/pages/AddtoBasket';
+import MainSearch from '../support/pages/MainSearch';
+import Basket from '../support/pages/Basket';
+import AddressSelect from '../support/pages/AddressSelect';
+import Payment from '../support/pages/Payment';
 
 describe('Order suite', () => {
-    beforeEach(() => {
-  
-      cy.visit('/admin/my-profile/');
-      cy.log('Open authorization form');
-      cy.visit('/#/login');
-      cy.get('button[aria-label="Close Welcome Banner"]').click();
-      fillAuthorizationFields(user.email, user.password);
-      cy.get('a[aria-label="dismiss cookie message"]').click();
+  beforeEach(() => {
 
-    });
-  
-    it('Order with positive scenario', () => {
-        cy.log('adding to the busket');
-        cy.get('button.btn-basket[aria-label="Add to Basket"]').eq(0).click();
-        cy.get('button.mat-button[routerlink="/basket"][aria-label="Show the shopping cart"]').click();
-        cy.get('Button#checkoutButton').should('be.enabled');
-        cy.get('Button#checkoutButton').click();
+    LoginPage.visit();
+    LoginPage.getWelcomeBanner().click();
 
-        cy.log('Select an address');
-        cy.get('button[aria-label="Add a new address"]').should('be.enabled').click();
+    fillAuthorizationFields(user.email, user.password);
+    MainSearch.getBusketButton().should('be.visible');
 
-        cy.log('Adding new address');
-        cy.get('#mat-input-3').type(user.country);
-        cy.get('#mat-input-3').should('have.prop', 'value', user.country);
+    LoginPage.getCookiesButton().click();
 
-        cy.get('#mat-input-4').type(user.name);
-        cy.get('#mat-input-4').should('have.prop', 'value', user.name);
+  });
 
-        cy.get('#mat-input-5').type(user.mobile);
-        cy.get('#mat-input-5').should('have.prop', 'value', user.mobile);
+  it('Order with positive scenario', () => {
 
-        cy.get('#mat-input-6').type(user.zip);
-        cy.get('#mat-input-6').should('have.prop', 'value', user.zip);
 
-        cy.get('textarea.mat-input-element#address').type(user.adddress);
-        cy.get('textarea.mat-input-element#address').should('have.prop', 'value', user.adddress);
+    AddtoBasket.getAddtoBasketButton().eq(0).click();
+    AddtoBasket.getYourBasketButton().click();
 
-        cy.get('#mat-input-8').type(user.city);
-        cy.get('#mat-input-8').should('have.prop', 'value', user.city);
+    Basket.getCheckoutButton().should('be.enabled');
+    Basket.getCheckoutButton().click();
 
-        cy.get('#mat-input-9').type(user.state);
-        cy.get('#mat-input-9').should('have.prop', 'value', user.state);
+    AddressSelect.getAddNewAddressButton().should('be.enabled').click();
 
-        cy.get('#submitButton').should('be.enabled').click();
+    AddressSelect.getCountryField().type(user.country);
+    AddressSelect.getCountryField().should('have.prop', 'value', user.country);
 
-        cy.get('span.mat-radio-container').first().click();
-        cy.get('button.mat-raised-button[aria-label="Proceed to payment selection"]').should('be.enabled').click();
-        cy.get('span.mat-radio-outer-circle').eq(1).click({force: true});
-        cy.get('button.mat-raised-button[color="primary"][aria-label="Proceed to delivery method selection"]').should('be.enabled').click();
+    AddressSelect.getNameField().type(user.name);
+    AddressSelect.getNameField().should('have.prop', 'value', user.name);
 
-        cy.log('Payment');
-        cy.get('mat-expansion-panel-header.mat-expansion-panel-header').first().click();
-        cy.get('input.mat-input-element.mat-form-field-autofill-control[aria-required="true"][id="mat-input-10"]').type(user.name);
-        cy.get('input.mat-input-element.mat-form-field-autofill-control[aria-required="true"][id="mat-input-10"]').should('have.prop', 'value', user.name);
+    AddressSelect.getMobileField().type(user.mobile);
+    AddressSelect.getMobileField().should('have.prop', 'value', user.mobile);
 
-        cy.get('input.mat-input-element.mat-form-field-autofill-control[aria-required="true"][id="mat-input-11"][type="number"]').type(user.card);
-        cy.get('input.mat-input-element.mat-form-field-autofill-control[aria-required="true"][id="mat-input-11"][type="number"]').should('have.prop', 'value', user.card);
-        cy.get('select#mat-input-12').select('2');
+    AddressSelect.getZipField().type(user.zip);
+    AddressSelect.getZipField().should('have.prop', 'value', user.zip);
 
-        cy.get('select#mat-input-13').select('2081');
+    AddressSelect.getAddressField().type(user.adddress);
+    AddressSelect.getAddressField().should('have.prop', 'value', user.adddress);
 
-        cy.get('button#submitButton').should('be.enabled').click();
+    AddressSelect.getCityField().type(user.city);
+    AddressSelect.getCityField().should('have.prop', 'value', user.city);
 
-        cy.get('span.mat-radio-container').first().click({force: true});
+    AddressSelect.getStateField().type(user.state);
+    AddressSelect.getStateField().should('have.prop', 'value', user.state);
 
-        cy.get('button.mat-raised-button[aria-label="Proceed to review"]').should('be.enabled').click();
-        cy.get('button#checkoutButton').should('be.enabled').click();
-        //cy.get('div[_ngcontent-odf-c236]').should('have text', 'Your order has been placed and is being processed.');
+    AddressSelect.getSubmitButton().should('be.enabled').click();
 
-        });
-    });
+    AddressSelect.getRadioButton().eq(0).click();
+    AddressSelect.getContinueButton1().should('be.enabled').click();
+
+    AddressSelect.getRadioButton2().eq(1).click({ force: true });
+    AddressSelect.getContinueButton2().should('be.enabled').click();
+
+    Payment.getAddNewCardButton().first().click();
+    Payment.getNameField().type(user.name);
+    Payment.getNameField().should('have.prop', 'value', user.name);
+
+    Payment.getCardNumberField().type(user.card);
+    Payment.getCardNumberField().should('have.prop', 'value', user.card);
+    Payment.getExpiryMonthButton().select('2');
+
+    Payment.getExpiryYearButton().select('2081');
+
+    Payment.getSubmitButton().should('be.enabled').click();
+
+    Payment.getSubmitButton().first().click({ force: true });
+
+    Payment.getRadioButton().first().click();
+
+    Payment.getSubmitToProceedButton().should('be.enabled').click();
+
+    Payment.getPlaceYourOrderButton().should('be.enabled').click();
+
+  });
+});

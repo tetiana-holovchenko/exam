@@ -1,28 +1,34 @@
 import user from '../fixtures/user.json'
+import LoginPage from '../support/pages/LoginPage';
+import { fillAuthorizationFields } from '../support/helper';
+import MainSearch from '../support/pages/MainSearch';
+import Feedback from '../support/pages/Feedback';
+
+
 
 describe('CustomerFeedback', () => {
+    beforeEach(() => {
+        LoginPage.visit();
+        LoginPage.getWelcomeBanner().click();
+        fillAuthorizationFields(user.email, user.password);
+        MainSearch.getBusketButton().should('be.visible');
+        LoginPage.getCookiesButton().click();
+    });
+    it('Fillin CustomerFeedback form', () => {
+        Feedback.visit();
 
-    it('Fillin CustomerFeedback', () => {
+        Feedback.getEmailField().should('be.disabled');
+        Feedback.getCommentField().type(user.comment);
 
-    cy.visit('/#/contact');
-    cy.get('button[aria-label="Close Welcome Banner"]').click();
-    cy.log('Fill in Customer Feedback form');
+        Feedback.getSlider().type('{rightarrow}');
 
-    cy.get('#mat-input-1').should('be.disabled');
-    cy.get('#comment').type(user.comment);
+        Feedback.getCaptcha().then(($captcha) => {
+            const captchaExpression = $captcha.text(); 
+            const result = eval(captchaExpression);
+            Feedback.getCaptchaResultField().type(result);
+        });
 
-    cy.get('mat-slider#rating').type('{rightarrow}');
-    
-    cy.get('code#captcha').then(($captcha) => {
-        const captchaExpression = $captcha.text(); // Получаем текст капчи
-        const result = eval(captchaExpression);
-    cy.get('input#captchaControl[aria-label="Field for the result of the CAPTCHA code"]').type(result);
-
-
-    cy.get('button#submitButton').should('be.enabled').click();
-
-});
-
-});
-
+        Feedback.getSubmitButton().should('be.enabled').click();
+        Feedback.getSuccessPopup().should('contain', 'Thank you for your feedback.');
+    });
 });
