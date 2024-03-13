@@ -1,3 +1,7 @@
+import user from '../fixtures/user.json'
+import LoginPage from '../support/pages/LoginPage';
+import UserRegistration from './pages/UserRegistration';
+
 
 
 export function fillAuthorizationFields(useremail, password) {
@@ -5,42 +9,40 @@ export function fillAuthorizationFields(useremail, password) {
     useremail ? cy.get('#email').type(useremail) : cy.log('useremail field is empty');
     password ? cy.get('#password').type(password) : cy.log('password field is empty');
 
-    cy.get('#loginButton').click({ force: true });
-
+    LoginPage.getSubmitButton().click({ force: true });
+    
 }
 
 export function registrationTet(useremail, userpassword) {
 
     cy.log('Pre-registration for Tet');
 
-    cy.visit('/');
-    cy.get('button[aria-label="Close Welcome Banner"]').click();
-    cy.get('#navbarAccount').click();
-    cy.get('#navbarLoginButton').click();
-    cy.get('a[routerlink="/register"].primary-link').click();
+    UserRegistration.visit();
+    LoginPage.getWelcomeBanner().click();
+    UserRegistration.getOpenAccountButton().click();
+    UserRegistration.getOpenAccountButton2().click();
+    UserRegistration.getNotYetButton().click();
 
+    UserRegistration.getEmailField().type(useremail);
+    UserRegistration.getEmailField().should('have.prop', 'value', useremail);
 
-    cy.log('Fill in the fields Personal Details fields');
-    cy.get('input#emailControl').type(useremail);
-    cy.get('input#emailControl').should('have.prop', 'value', useremail);
+    UserRegistration.getPasswordField().type(userpassword);
+    UserRegistration.getPasswordField().should('have.prop', 'value', userpassword);
 
-    cy.get('input#passwordControl').type(userpassword); 
-    cy.get('input#passwordControl').should('have.prop', 'value', userpassword);
-    cy.get('input#repeatPasswordControl').type(userpassword);
-    cy.get('input#repeatPasswordControl').should('have.prop', 'value', userpassword);
+    UserRegistration.getRepeatPasswordField().type(userpassword);
+    UserRegistration.getRepeatPasswordField().should('have.prop', 'value', userpassword);
 
-    cy.log('Security question');
-    cy.get('mat-select[aria-label="Selection list for the security question"]').click();
-    cy.get('.mat-option-text').eq(1).click();
+    UserRegistration.getSecurityQuestion().click();
+    UserRegistration.getPickUpQuestion().eq(1).click();
 
-    cy.get('input#securityAnswerControl').then(($input) => {
+    UserRegistration.getSecurityAnswerField().then(($input) => {
         if ($input.length > 0) {
-            cy.get('input#securityAnswerControl').type('Some answer'); 
-            cy.get('input#securityAnswerControl').should('have.prop', 'value', 'Some answer');
+            UserRegistration.getSecurityAnswerField().type('Some answer'); 
+            UserRegistration.getSecurityAnswerField().should('have.prop', 'value', 'Some answer');
         }
     });
 
-    cy.get('#registerButton').click();
+    UserRegistration.getRegisterButton().click();
 }
 
 export function itemSearchMainPage(productName) {
