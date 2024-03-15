@@ -1,4 +1,4 @@
-import LoginPage from "./LoginPage";
+import LoginPage from "./loginPage";
  
 class MainPage {
 

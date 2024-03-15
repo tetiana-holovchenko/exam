@@ -7,19 +7,19 @@ class AddressSelect {
 
     getCountryField() {
         cy.log('Fill in "Adding new address"');
-        return cy.get('#mat-input-3')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-9[placeholder="Please provide a country."]')
     }
 
     getNameField() {
-        return cy.get('#mat-input-4')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-10[placeholder="Please provide a name."]')
     }
 
     getMobileField() {
-        return cy.get('#mat-input-5')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-11[placeholder="Please provide a mobile number."]')
     }
 
     getZipField() {
-        return cy.get('#mat-input-6')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-12[placeholder="Please provide a ZIP code."]')
     }
 
     getAddressField() {
@@ -27,11 +27,11 @@ class AddressSelect {
     }
 
     getCityField() {
-        return cy.get('#mat-input-8')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-14[placeholder="Please provide a city."]')
     }
 
     getStateField() {
-        return cy.get('#mat-input-9')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-15[placeholder="Please provide a state."]')
     }
     
     getSubmitButton() {

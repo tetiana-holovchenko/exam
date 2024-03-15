@@ -1,86 +1,110 @@
 import user from '../fixtures/user.json'
 import {fillAuthorizationFields} from '../support/helper';
 import { itemSearchMainPage } from '../support/helper';
-import LoginPage from '../support/pages/LoginPage';
-import AddtoBasket from '../support/pages/AddtoBasket';
-import MainSearch from '../support/pages/MainSearch';
-import Basket from '../support/pages/Basket';
-import AddressSelect from '../support/pages/AddressSelect';
-import Payment from '../support/pages/Payment';
+import loginPage from '../support/pages/loginPage';
+import addtoBasket from '../support/pages/addtoBasket';
+import mainSearch from '../support/pages/mainSearch';
+import basket from '../support/pages/basket';
+import addressSelect from '../support/pages/addressSelect';
+import payment from '../support/pages/payment';
+import userRegistration from '../support/pages/userRegistration';
+
+describe('Registration', () => {
+  before(() => {
+  
+    userRegistration.visit();
+      loginPage.getWelcomeBanner().click();
+      userRegistration.getOpenAccountButton().click();
+      userRegistration.getOpenAccountButton2().click();
+      userRegistration.getNotYetButton().click();
 
 
+      userRegistration.getEmailField().type('tettest1@gmail.com');
+      userRegistration.getEmailField().should('have.prop', 'value', user.email);
 
-describe('Order suite', () => {
-  beforeEach(() => {
+      userRegistration.getPasswordField().type('testpass');
+      userRegistration.getPasswordField().should('have.prop', 'value', user.password);
+      userRegistration.getRepeatPasswordField().type('testpass');
+      userRegistration.getRepeatPasswordField().should('have.prop', 'value', user.password);
 
-    LoginPage.visit();
-    LoginPage.getWelcomeBanner().click();
-    fillAuthorizationFields(user.email, user.password);
-    MainSearch.getBusketButton().should('be.visible');
-    LoginPage.getCookiesButton().click();
+      userRegistration.getSecurityQuestion().click(); 
 
+      userRegistration.getPickUpQuestion().eq(1).click();
+  
+      userRegistration.getSecurityAnswerField().type(user.securityAnswer);
+      userRegistration.getSecurityAnswerField().should('have.prop', 'value', user.securityAnswer);
+
+
+      userRegistration.getRegisterButton().click();
+
+      loginPage.visit();
+      fillAuthorizationFields(user.email, user.password);
+      mainSearch.getBusketButton().should('be.visible');
+      loginPage.getCookiesButton().click();
   });
 
   it('search with helper', () => {
 
-    LoginPage.getCookiesButton().click();
-    const productName = 'OWASP Juice Shop Hoodie';
-    itemSearchMainPage(productName);
-    AddtoBasket.getYourBasketButton().click();
-    Basket.getCheckoutButton().should('be.enabled');
-    
-    Basket.getCheckoutButton().click();
+    loginPage.getCookiesButton().click();
+    const productName = 'OWASP Juice Shop Iron-Ons (16pcs)';
+    itemSearchMainPage(productName).click();
+    addtoBasket.getYourBasketButton().click();
+    addtoBasket.getEmailcheck().contains(user.email);
+    addtoBasket.getItemnamecheck().contains(productName);
 
-    AddressSelect.getAddNewAddressButton().should('be.enabled').click();
 
-    AddressSelect.getCountryField().type(user.country);
-    AddressSelect.getCountryField().should('have.prop', 'value', user.country);
+    basket.getCheckoutButton().click();
 
-    AddressSelect.getNameField().type(user.name);
-    AddressSelect.getNameField().should('have.prop', 'value', user.name);
+    addressSelect.getAddNewAddressButton().should('be.enabled').click();
 
-    AddressSelect.getMobileField().type(user.mobile);
-    AddressSelect.getMobileField().should('have.prop', 'value', user.mobile);
+   addressSelect.getCountryField().type(user.country);
+    addressSelect.getCountryField().should('have.prop', 'value', user.country);
 
-    AddressSelect.getZipField().type(user.zip);
-    AddressSelect.getZipField().should('have.prop', 'value', user.zip);
+    addressSelect.getNameField().type(user.name);
+    addressSelect.getNameField().should('have.prop', 'value', user.name);
 
-    AddressSelect.getAddressField().type(user.adddress);
-    AddressSelect.getAddressField().should('have.prop', 'value', user.adddress);
+    addressSelect.getMobileField().type(user.mobile);
+    addressSelect.getMobileField().should('have.prop', 'value', user.mobile);
 
-    AddressSelect.getCityField().type(user.city);
-    AddressSelect.getCityField().should('have.prop', 'value', user.city);
+    addressSelect.getZipField().type(user.zip);
+    addressSelect.getZipField().should('have.prop', 'value', user.zip);
 
-    AddressSelect.getStateField().type(user.state);
-    AddressSelect.getStateField().should('have.prop', 'value', user.state);
+    addressSelect.getAddressField().type(user.adddress);
+    addressSelect.getAddressField().should('have.prop', 'value', user.adddress);
 
-    AddressSelect.getSubmitButton().should('be.enabled').click();
+    addressSelect.getCityField().type(user.city);
+    addressSelect.getCityField().should('have.prop', 'value', user.city);
 
-    AddressSelect.getRadioButton().eq(0).click();
-    AddressSelect.getContinueButton1().should('be.enabled').click();
+    addressSelect.getStateField().type(user.state);
+    addressSelect.getStateField().should('have.prop', 'value', user.state);
 
-    AddressSelect.getRadioButton2().eq(1).click({ force: true });
-    AddressSelect.getContinueButton2().should('be.enabled').click();
+    addressSelect.getSubmitButton().should('be.enabled').click();
 
-    Payment.getAddNewCardButton().first().click();
-    Payment.getNameField().type(user.name);
-    Payment.getNameField().should('have.prop', 'value', user.name);
+    addressSelect.getRadioButton().eq(0).click();
+    addressSelect.getContinueButton1().should('be.enabled').click();
 
-    Payment.getCardNumberField().type(user.card);
-    Payment.getCardNumberField().should('have.prop', 'value', user.card);
-    Payment.getExpiryMonthButton().select('2');
+    addressSelect.getRadioButton2().eq(1).click({ force: true });
+    addressSelect.getContinueButton2().should('be.enabled').click();
 
-    Payment.getExpiryYearButton().select('2081');
+    payment.getAddNewCardButton().first().click();
+    payment.getNameField().type(user.name);
+    payment.getNameField().should('have.prop', 'value', user.name);
 
-    Payment.getSubmitButton().should('be.enabled').click();
+    payment.getCardNumberField().type(user.card);
+    payment.getCardNumberField().should('have.prop', 'value', user.card);
+    payment.getExpiryMonthButton().select('2');
 
-    Payment.getSubmitButton().first().click({ force: true });
+    payment.getExpiryYearButton().select('2081');
 
-    Payment.getRadioButton().first().click();
+    payment.getSubmitButton().should('be.enabled').click();
 
-    Payment.getSubmitToProceedButton().should('be.enabled').click();
+    payment.getSubmitButton().first().click({ force: true });
 
-    Payment.getPlaceYourOrderButton().should('be.enabled').click();
+    payment.getRadioButton().first().click();
+
+    payment.getSubmitToProceedButton().should('be.enabled').click();
+
+    payment.getPlaceYourOrderButton().should('be.enabled').click();
 
   });
 });

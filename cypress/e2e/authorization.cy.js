@@ -1,64 +1,89 @@
 import user from '../fixtures/user.json'
 import { fillAuthorizationFields } from '../support/helper';
-import { registrationTet } from '../support/helper';
-import LoginPage from '../support/pages/LoginPage';
-import MainSearch from '../support/pages/MainSearch';
+import { registrationUser } from '../support/helper';
+import loginPage from '../support/pages/LoginPage';
+import userRegistration from '../support/pages/UserRegistration';
+import mainSearch from '../support/pages/MainSearch';
 
-describe('Authorization positive scenario', () => {
 
+
+
+describe('Registration', () => {
   before(() => {
+  
+  userRegistration.visit();
+      loginPage.getWelcomeBanner().click();
+    userRegistration.getOpenAccountButton().click();
+    userRegistration.getOpenAccountButton2().click();
+    userRegistration.getNotYetButton().click();
 
-    const useremail = 'tettest@gmail.com';
-    const userpassword = 'testpass';
-    registrationTet(useremail, userpassword);
 
-  });
+    userRegistration.getEmailField().type('tettest1@gmail.com');
+    userRegistration.getEmailField().should('have.prop', 'value', user.email);
+
+    userRegistration.getPasswordField().type('testpass');
+    userRegistration.getPasswordField().should('have.prop', 'value', user.password);
+    userRegistration.getRepeatPasswordField().type('testpass');
+    userRegistration.getRepeatPasswordField().should('have.prop', 'value', user.password);
+
+    userRegistration.getSecurityQuestion().click(); 
+
+    userRegistration.getPickUpQuestion().eq(1).click();
+  
+    userRegistration.getSecurityAnswerField().type(user.securityAnswer);
+    userRegistration.getSecurityAnswerField().should('have.prop', 'value', user.securityAnswer);
+
+
+    userRegistration.getRegisterButton().click();
+});
+
+
 
   it('Authorization with valid data', () => {
 
-    LoginPage.visit();
+    loginPage.visit();
     fillAuthorizationFields(user.email, user.password);
-    MainSearch.getBusketButton().should('be.visible');
+    mainSearch.getBusketButton().should('be.visible');
 
   });
-});
 
 
 describe('Authorization negative scenario', () => {
 
   it('Authorization with all empty fields', () => {
 
-    LoginPage.visit();
-    LoginPage.getWelcomeBanner().click();
+    loginPage.visit();
+    loginPage.getWelcomeBanner().click();
 
     fillAuthorizationFields('', '');
 
-    LoginPage.getSubmitButtonDisabled().should('have.attr', 'aria-label', 'Login');
-    LoginPage.getErrorMessageText().should('contain', 'Invalid email or password.');
+    loginPage.getSubmitButtonDisabled().should('have.attr', 'aria-label', 'Login');
+    loginPage.getErrorMessageText().should('contain', 'Invalid email or password.');
   });
 
   it('Authorization with empty Pass field', () => {
 
     cy.log('Open autorization form');
-    LoginPage.visit();
-    LoginPage.getWelcomeBanner().click();
+    loginPage.visit();
+    loginPage.getWelcomeBanner().click();
 
     fillAuthorizationFields(user.email, '');
 
-    LoginPage.getSubmitButtonDisabled().should('have.attr', 'aria-label', 'Login');
-    LoginPage.getErrorMessageText().should('contain', 'Invalid email or password.');
+    loginPage.getSubmitButtonDisabled().should('have.attr', 'aria-label', 'Login');
+    loginPage.getErrorMessageText().should('contain', 'Invalid email or password.');
 
   });
 
   it('Authorization with empty Email field', () => {
 
     cy.log('Open autorization form');
-    LoginPage.visit();
-    LoginPage.getWelcomeBanner().click();
+    loginPage.visit();
+    loginPage.getWelcomeBanner().click();
 
     fillAuthorizationFields('', user.password);
 
-    LoginPage.getSubmitButtonDisabled().should('have.attr', 'aria-label', 'Login');
-    LoginPage.getErrorMessageText().should('contain', 'Invalid email or password.');
+    loginPage.getSubmitButtonDisabled().should('have.attr', 'aria-label', 'Login');
+    loginPage.getErrorMessageText().should('contain', 'Invalid email or password.');
   });
+});
 });

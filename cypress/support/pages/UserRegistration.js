@@ -1,7 +1,6 @@
 
 class UserRegistration {
     visit() {
-        // cy.log('Open registration form');
         cy.visit('/');
     }
 

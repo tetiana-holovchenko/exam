@@ -1,6 +1,6 @@
 import user from '../fixtures/user.json'
-import LoginPage from '../support/pages/LoginPage';
-import UserRegistration from './pages/UserRegistration';
+import LoginPage from './pages/loginPage';
+import UserRegistration from './pages/userRegistration';
 
 
 
@@ -13,7 +13,7 @@ export function fillAuthorizationFields(useremail, password) {
     
 }
 
-export function registrationTet(useremail, userpassword) {
+export function registrationUser(useremail, userpassword) {
 
     cy.log('Pre-registration for Tet');
 
@@ -46,16 +46,18 @@ export function registrationTet(useremail, userpassword) {
 }
 
 export function itemSearchMainPage(productName) {
-    cy.log('Find item');
-    cy.get('body').then((body) => {
-        if (body.find(`div.item-name:contains("${productName}")`).length > 0) {
-            cy.get(`div.item-name:contains("${productName}")`);
-            cy.get('button.btn-basket[aria-label="Add to Basket"]').eq(4).click();
 
-
-        } else {
-            cy.get('button.mat-paginator-navigation-next').click({ force: true });
-            itemSearchMainPage(productName);
-        }
-    });
-}
+cy.log('Find item');
+return cy.get('mat-card').then((cards) => {
+    if (cards.find(`div.item-name:contains("${productName}")`).length > 0) {
+        return cy.get(`div.item-name:contains("${productName}")`).then(() => {
+            cy.get(`img[alt="${productName}"]`).then(($img) => {
+                cy.wrap($img).parents('.mat-card').find('button[aria-label="Add to Basket"]').click();
+            });
+        });
+    } else {
+        cy.get('button.mat-paginator-navigation-next').click({ force: true });
+        return itemSearchMainPage(productName);
+    }
+});
+};

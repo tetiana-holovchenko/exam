@@ -8,19 +8,19 @@ class Payment {
 
     getNameField() {
         cy.log('Fill in details');
-        return cy.get('input.mat-input-element.mat-form-field-autofill-control[aria-required="true"][id="mat-input-10"]')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-16[aria-required="true"]')
     }
 
     getCardNumberField() {
-        return cy.get('input.mat-input-element.mat-form-field-autofill-control[aria-required="true"][id="mat-input-11"][type="number"]')
+        return cy.get('input.mat-input-element.mat-form-field-autofill-control#mat-input-17[type="number"][aria-required="true"]')
     }
 
     getExpiryMonthButton() {
-        return cy.get('select#mat-input-12')
+        return cy.get('select.mat-input-element.mat-form-field-autofill-control#mat-input-18[aria-required="true"]')
     }
 
     getExpiryYearButton() {
-        return cy.get('select#mat-input-13')
+        return cy.get('select.mat-input-element.mat-form-field-autofill-control#mat-input-19[aria-required="true"]')
     }
 
     getSubmitButton() {
