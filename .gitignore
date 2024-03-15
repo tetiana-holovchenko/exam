@@ -1,2 +1,6 @@
 node_modules
 .idea
+screenshots
+.DS_Store
+Order suite -- Order with positive scenario (failed).png
+oreder.cy.js
